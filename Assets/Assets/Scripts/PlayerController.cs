@@ -23,6 +23,10 @@ public class PlayerController : MonoBehaviour
     private float knockbackTimer;
     private Vector2 knockbackVelocity;
 
+    public CanvasGroup inventoryPanel;
+    public inventorySystem inventory;
+    public ItemTypes swordItem; 
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -30,6 +34,13 @@ public class PlayerController : MonoBehaviour
 
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
+    }
+
+    void Start()
+    {
+        inventoryPanel.alpha = 0;
+        inventoryPanel.interactable = false;
+        inventoryPanel.blocksRaycasts = false;
     }
 
     void Update()
@@ -52,8 +63,18 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            StartAttack();
-            return;
+            if (inventory.IsEquipped(swordItem))
+            {
+                StartAttack();
+                return;
+            }
+            else
+                return;
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ToggleInventory();
         }
 
         movement.x = Input.GetAxisRaw("Horizontal");
@@ -137,6 +158,28 @@ public class PlayerController : MonoBehaviour
             {
                 enemy.TakeDamage(attackDamage);
             }
+        }
+    }
+
+    void ToggleInventory()
+    {
+        bool isOpen = inventoryPanel.alpha == 1;
+
+        if (isOpen)
+        {
+            inventoryPanel.alpha = 0;
+            inventoryPanel.interactable = false;
+            inventoryPanel.blocksRaycasts = false;
+
+            Time.timeScale = 1f;
+        }
+        else
+        {
+            inventoryPanel.alpha = 1;
+            inventoryPanel.interactable = true;
+            inventoryPanel.blocksRaycasts = true;
+
+            Time.timeScale = 0f;
         }
     }
 }
