@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public CanvasGroup inventoryPanel;
     public inventorySystem inventory;
     public ItemTypes swordItem; 
+    public ItemTypes daggerItem; 
 
     void Awake()
     {
@@ -63,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            if (inventory.IsEquipped(swordItem))
+            if (inventory.IsEquipped(swordItem) || inventory.IsEquipped(daggerItem))
             {
                 StartAttack();
                 return;
@@ -110,7 +111,14 @@ public class PlayerController : MonoBehaviour
         isAttacking = true;
         movement = Vector2.zero;
 
-        currentAttackAnimation = lastDirection.Replace("Player", "PlayerAttack");
+        if (inventory.IsEquipped(daggerItem))
+        {
+            currentAttackAnimation = lastDirection.Replace("Player", "PlayerDagger");
+        }
+        else if (inventory.IsEquipped(swordItem))
+        {
+            currentAttackAnimation = lastDirection.Replace("Player", "PlayerAttack");
+        }
         animator.Play(currentAttackAnimation, 0, 0f);
     }
 
