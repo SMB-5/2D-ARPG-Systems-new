@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public inventorySystem inventory;
     public ItemTypes swordItem; 
     public ItemTypes daggerItem; 
+    public ItemTypes lanceItem; 
 
     void Awake()
     {
@@ -64,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Z))
         {
-            if (inventory.IsEquipped(swordItem) || inventory.IsEquipped(daggerItem))
+            if (inventory.IsEquipped(swordItem) || inventory.IsEquipped(daggerItem) || inventory.IsEquipped(lanceItem))
             {
                 StartAttack();
                 return;
@@ -114,6 +115,10 @@ public class PlayerController : MonoBehaviour
         if (inventory.IsEquipped(daggerItem))
         {
             currentAttackAnimation = lastDirection.Replace("Player", "PlayerDagger");
+        }
+        else if (inventory.IsEquipped(lanceItem))
+        {
+            currentAttackAnimation = lastDirection.Replace("Player", "PlayerLance");
         }
         else if (inventory.IsEquipped(swordItem))
         {
